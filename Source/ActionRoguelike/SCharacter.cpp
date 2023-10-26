@@ -6,6 +6,7 @@
 #include "Camera\CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SInteractionrComponent.h"
+#include "SAttributeComponent.h"
 // Sets default values
 ASCharacter::ASCharacter()
 {
@@ -23,7 +24,7 @@ ASCharacter::ASCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
-
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 
 	bUseControllerRotationYaw = false;
 }
