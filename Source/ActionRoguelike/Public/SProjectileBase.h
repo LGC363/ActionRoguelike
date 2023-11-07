@@ -10,10 +10,9 @@
 class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
-class UNiagaraComponent;
 class UAudioComponent;
 class USoundCue;
-class UCameraShakeBase;
+class UCameraShake;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASProjectileBase : public AActor
@@ -34,6 +33,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 		UParticleSystemComponent* EffectComp;
+
+
+	UFUNCTION()
+		virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
