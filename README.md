@@ -15,15 +15,18 @@
 单例ObjectPoolSystem，定义在UWorld中，修改了world源码，生命周期和world相同，因此不必关心world切换带来的对象池切换问题，在world销毁时整个system也跟着销毁了。
 World在BeginPlay时初始化对象池系统。World在BeginDestroy时销毁对象池系统。
 修改了world中的SpawnActor和DestroyActor源码，SpawnActor原先直接调用NewObject<AActor>，现在会先去ObjectPoolSystem中找对象池：
+
     Actor = Cast<AActor>(PoolSystem->Spawn(Class, LevelToSpawnIn, FOnSpawnObjectFromPoolDelegate::CreateLambda(OnSpawnObjectFromPool)));
+    
 DestroyActor同理：
+
 	  PoolSystem->Recycle(ThisActor)；
+
  
 网络同步问题：
     使用对象池导致UWorld::DestroyActor没有真正Destroy，所以客户端也不会Destroy，解决方案是在Actor回收到对象池后，通知NetDriver销毁Actor：
-    do
-	{
-		...
+
+	do{
 		if (PoolSystem->Recycle(ThisActor))
 		{
 			// Notify net drivers that this guy has been destroyed.
@@ -37,10 +40,8 @@ DestroyActor同理：
 					}
 				}
 			}
-			
 			return true;
 		}
-
 		// Simply return 'false' if the pooled-object has been destroyed more than once
 		return false;
 	}
